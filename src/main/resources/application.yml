@@ -1,0 +1,25 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test   
+      auto-index-creation: true
+  application:
+    name: PLATFORM-SERVICE
+
+server:
+  address: localhost
+  port: 9002
+  servlet.context-path: /cms
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+cloud:
+  aws:
+    credentials:
+      access-key: test
+      secret-key: test
+    region:
+      static: us-east-1
+    s3:
+      bucket-name: eco-home-catalogue
