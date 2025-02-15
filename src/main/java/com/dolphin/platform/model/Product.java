@@ -39,4 +39,5 @@ public class Product {
 	private String categoryId;
 	private String subCategoryId;
 	private List<Attachment> attachments;
+	private List<Variant> variants;
 }

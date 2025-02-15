@@ -1,17 +1,19 @@
 package com.dolphin.platform.model;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.Builder;
+import com.dolphin.platform.dto.OrderItem;
+
 import lombok.Data;
 
 @Data
-@Builder
 @Document
-public class Attachment {
+public class Order {
 	@Id
-    private String id;
-    private String fileUrl;
-	private String fileName;
+	private String id;
+	private List<OrderItem> orderItem;
+	private Double total;
 }

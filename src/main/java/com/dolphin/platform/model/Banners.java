@@ -3,17 +3,17 @@ package com.dolphin.platform.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @Document
-public class Variant {
+public class Banners {
 	@Id
     private String id;
-	private String name;
-    private Double price;
-    private String quantity;
-    private Integer inventory;
-    private String color;
-    private String size;
+    private String name;
+    private String description;
+	private String categoryId;
+	private Attachment image;
 }

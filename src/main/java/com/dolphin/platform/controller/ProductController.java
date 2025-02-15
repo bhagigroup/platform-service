@@ -1,8 +1,6 @@
 package com.dolphin.platform.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +17,22 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dolphin.platform.dto.CategoryDto;
+import com.dolphin.platform.dto.FilterDto;
 import com.dolphin.platform.model.Attachment;
+import com.dolphin.platform.model.Banners;
 import com.dolphin.platform.model.Category;
 import com.dolphin.platform.model.Product;
 import com.dolphin.platform.model.SubCategory;
+import com.dolphin.platform.model.Variant;
 import com.dolphin.platform.service.ProductService;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/product")
+@Slf4j
 @CrossOrigin
 public class ProductController {
 
@@ -38,6 +41,12 @@ public class ProductController {
     @GetMapping("all-products")
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
+    }
+    
+    @PostMapping("products-by-filter")
+    public List<Product> getProductsWithFilter(@RequestBody FilterDto filter) {
+    	log.info("filter");
+        return productService.getProductsWithFilter(filter);
     }
 
     @GetMapping("/{id}")
@@ -65,19 +74,22 @@ public class ProductController {
     }
     
     @PostMapping("/upload")
-    public ResponseEntity<Attachment> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Attachment> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("productId") String productId) {
         try {
-        	Attachment response = productService.uploadFile(file);
+        	log.info("hello...");
+        	Attachment response = productService.uploadFile(file, productId);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(null);
         }
     }
     
-    public ResponseEntity<Product> saveAttachment(@RequestBody Attachment attachment){
-    	Product createdProduct = productService.saveAttachment(attachment);
-        return ResponseEntity.status(HttpStatus.OK).body(createdProduct);
-    }
+	/*
+	 * public ResponseEntity<Product> saveAttachment(@RequestBody Attachment
+	 * attachment){ Product createdProduct =
+	 * productService.saveAttachment(attachment); return
+	 * ResponseEntity.status(HttpStatus.OK).body(createdProduct); }
+	 */
     
     @PostMapping("/create-category")
     public ResponseEntity<Category> createCategory(@RequestBody Category category) {
@@ -104,6 +116,50 @@ public class ProductController {
     @GetMapping("get-sub-categories/{id}")
     public ResponseEntity<List<SubCategory>> getSubCategories(@PathVariable String id) {
         return ResponseEntity.status(HttpStatus.OK).body(productService.getSubCategories(id));
+    }
+    
+    @PostMapping("/save-banner")
+    public ResponseEntity<Banners> createBanner(@RequestBody Banners banner) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.saveBanner(banner));
+    }
+    
+    @PostMapping("/cat-image-upload")
+    public ResponseEntity<Attachment> categoryImageUpload(@RequestParam("file") MultipartFile file, @RequestParam("categoryId") String categoryId) {
+        try {
+        	Attachment response = productService.catImageUpload(file, categoryId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+    @PostMapping("/subcat-image-upload")
+    public ResponseEntity<Attachment> subCategoryImageUpload(@RequestParam("file") MultipartFile file, @RequestParam("categoryId") String subCategoryId) {
+        try {
+        	Attachment response = productService.subCatImageUpload(file, subCategoryId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+    
+    @PostMapping("/banner-image-upload")
+    public ResponseEntity<Attachment> bannerImageUpload(@RequestParam("file") MultipartFile file, @RequestParam("categoryId") String bannerId) {
+        try {
+        	Attachment response = productService.bannerImageUpload(file, bannerId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+    @PostMapping("/save-variant/{productId}")
+    public ResponseEntity<Variant> saveVariant(@RequestBody Variant variant, @PathVariable String productId) {
+        try {
+        	log.info("productId...{}", productId);
+        	Variant response = productService.saveVariant(variant, productId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
     }
     
 }
