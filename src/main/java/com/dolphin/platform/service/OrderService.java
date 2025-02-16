@@ -32,6 +32,6 @@ public class OrderService {
 				.image(product.getAttachments().get(0)).orderQuantity(quantity).subTotal(quantity * variant.getPrice())
 				.build();
 		CartDto cartDto = CartDto.builder().cartItems(List.of(cartItem)).build();
-		return null;
+		return cartDto;
 	}
 }
